@@ -1,0 +1,46 @@
+{
+  "log": {
+    "loglevel": "none"
+  },
+  "inbounds": [
+    {
+      "port": 10000,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [{"password": "newbie"}]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {"path": "/jthan-trojan"}
+      }
+    },
+    {
+      "port": 10001,
+      "listen": "127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "clients": [{"id": "88888888-4444-4444-4444-121212121212"}]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {"path": "/jthan-vmess"}
+      }
+    },
+    {
+      "port": 10002,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [{"id": "99999999-4444-4444-4444-131313131313", "flow": "xtls-rprx-vision"}]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {"path": "/jthan-vless"}
+      }
+    }
+  ],
+  "outbounds": [
+    {"protocol": "freedom"}
+  ]
+}
