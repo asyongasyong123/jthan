@@ -8,11 +8,9 @@ on:
 
 jobs:
   build:
-    name: Build and Push
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
@@ -24,12 +22,12 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push image
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: pantasyongbayan/dockerjonathan
+          tags: |
+            pantasyongbayan/dockerjonathan
+            pantasyongbayan/dockerjonathan:latest
           platforms: linux/amd64
-          cache-from: type=registry,ref=pantasyongbayan/dockerjonathan:cache
-          cache-to: type=registry,ref=pantasyongbayan/dockerjonathan:cache,mode=max
