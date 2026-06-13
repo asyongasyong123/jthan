@@ -1,7 +1,7 @@
 FROM alpine:3.20 AS builder
 WORKDIR /app
 RUN apk add --no-cache curl unzip ca-certificates
-RUN curl -fL https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip -o xray.zip \
+RUN curl -fL --retry 3 --retry-delay 2 https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip -o xray.zip \
  && unzip xray.zip xray && chmod +x xray && mv xray /usr/local/bin/ \
  && rm -f xray.zip
 
