@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "[INFO] Container starting..."
-echo "[INFO] PORT=${PORT}"
+echo "=== Cloud Run PORT: $PORT ==="
 
-# Force nginx to listen on $PORT - no more sed/envsubst issues
+# Auto-generate nginx.conf gamit ang PORT ni Cloud Run
 cat > /usr/local/openresty/nginx/conf/nginx.conf <<EOF
 worker_processes auto;
 events { worker_connections 1024; }
@@ -13,14 +12,14 @@ http {
     server {
         listen ${PORT};
         listen [::]:${PORT};
-
+        
         location /health {
             return 200 'OK';
             add_header Content-Type text/plain;
         }
 
         location / {
-            return 200 'Cloud Run Running';
+            return 200 'Cloud Run OK';
         }
 
         location /JonathanTrWS {
@@ -98,11 +97,8 @@ http {
 }
 EOF
 
-echo "[INFO] Generated nginx.conf:"
-cat /usr/local/openresty/nginx/conf/nginx.conf | grep listen
-
-echo "[INFO] Starting Xray..."
+echo "=== Starting Xray ==="
 /usr/local/bin/xray -config /etc/xray.json &
 
-echo "[INFO] Starting OpenResty..."
+echo "=== Starting OpenResty on port $PORT ==="
 exec /usr/local/openresty/bin/openresty -g 'daemon off;'
