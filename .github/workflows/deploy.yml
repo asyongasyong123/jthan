@@ -2,8 +2,7 @@ name: Build & Push Docker Image
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -28,6 +27,8 @@ jobs:
           context: .
           push: true
           tags: |
-            pantasyongbayan/dockerjonathan
             pantasyongbayan/dockerjonathan:latest
+            pantasyongbayan/dockerjonathan:${{ github.sha }}
           platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
