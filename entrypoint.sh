@@ -3,7 +3,7 @@ set -e
 
 echo "Cloud Run PORT: $PORT"
 
-# I-replace ang ${PORT} sa nginx.conf
+# Gamita ang envsubst instead of sed para sure mu-work bisan unsa ang PORT
 export DOLLAR='$'
 envsubst '${PORT},${DOLLAR}' < /usr/local/openresty/nginx/conf/nginx.conf > /tmp/nginx.conf
 mv /tmp/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
@@ -11,10 +11,10 @@ mv /tmp/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 echo "Starting Xray..."
 /usr/local/bin/xray -config /etc/xray.json &
 
-echo "Starting OpenResty..."
+echo "Starting OpenResty on port $PORT..."
 /usr/local/openresty/bin/openresty -g 'daemon off;' &
 
-# Importante: Hulaton kung naay mamatay nga process
+# Importante: Hulaton kung naay process nga mamatay
 wait -n
-echo "One process exited, shutting down container"
+echo "A process exited. Shutting down."
 exit 1
