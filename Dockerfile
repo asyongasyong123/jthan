@@ -7,18 +7,15 @@ RUN curl -fL --retry 3 --retry-delay 2 https://github.com/XTLS/Xray-core/release
  && rm -f xray.zip
 
 FROM openresty/openresty:1.25.3.1-alpine
-# KEY FIX: Add gettext para sa envsubst command
-RUN apk add --no-cache ca-certificates bash tzdata gettext procps
+RUN apk add --no-cache ca-certificates bash tzdata gettext procps curl
 COPY --from=builder /usr/local/bin/xray /usr/local/bin/xray
 COPY config.json /etc/xray.json
-COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /usr/local/bin/xray /entrypoint.sh
 ENV PORT=8080
 EXPOSE 8080
 
-# KEY FIX: Healthcheck para dili mag timeout si Cloud Run
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -q --spider http://localhost:${PORT}/health || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:${PORT}/health || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
