@@ -11,7 +11,7 @@ echo "✅ Starting Nginx..."
 nginx -g "daemon off;" &
 NGINX_PID=$!
 
-# Kung asa man ni ang mohunong, mohunong sad ang tibuok script
+# Mamonitor ang duha — kung usa mohunong, mohunong tanan
 wait -n $XRAY_PID $NGINX_PID
-echo "⚠️ Usa ka serbisyo nahunong, gipatong ang tibuok proseso..."
+echo "⚠️ Service stopped, shutting down..."
 kill $XRAY_PID $NGINX_PID
