@@ -1,27 +1,21 @@
-# Base nga gamay nga Alpine Linux
 FROM alpine:3.20
 
-# I-install ang gikinahanglan: Nginx, unzip, ca-certificates
-RUN apk update && apk add --no-cache nginx unzip ca-certificates tzdata
+ENV XRAY_VERSION=26.2.6
 
-# I-download ug i-install ang EKSAKTONG Xray v1.8.26 gikan sa opisyal nga GitHub
-RUN wget -O /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/download/v1.8.26/Xray-linux-64.zip && \
-    unzip /tmp/xray.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/xray && \
-    rm -f /tmp/xray.zip
+RUN apk update --no-cache && apk add --no-cache \
+    nginx wget unzip ca-certificates tzdata
 
-# I-set ang saktong path para makita ang xray
-ENV PATH="/usr/local/bin:${PATH}"
+RUN wget -qO /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-64.zip && \
+    unzip /tmp/xray.zip -d /usr/local/bin/ && rm /tmp/xray.zip && \
+    chmod +x /usr/local/bin/xray
 
-# Kopyaha ang imong config files
+RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/http.d/*
+
 COPY xray.json /etc/xray/config.json
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /entrypoint.sh
-
-# Ihatag permiso sa entrypoint
 RUN chmod +x /entrypoint.sh
 
-# Bantayi ang port nga gikinahanglan sa Cloud Run
 EXPOSE 8080
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
