@@ -16,7 +16,7 @@ RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/http.d/*
 COPY xray.json /etc/xray/config.json
 COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 8080
 
 # ✅ Mas maayo nga pamaagi: kung usa mapalong, mapalong sad ang lain (dili biyaan nga nagdagan)
 ENTRYPOINT ["/bin/sh", "-c", "nginx -g 'daemon off;' & PID1=$!; exec xray run -c /etc/xray/config.json; wait $PID1"]
