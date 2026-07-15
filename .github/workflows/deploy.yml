@@ -22,13 +22,12 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile
           push: true
-          tags: |
-            pantasyongbayan/dockerjonathan:latest
-            pantasyongbayan/dockerjonathan:${{ github.sha }}
+          tags: docker.io/pantasyongbayan/jthan:latest
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: ""
+          cache-to: ""
