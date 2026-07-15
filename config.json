@@ -5,9 +5,8 @@
   "inbounds": [
     {
       "port": 10001,
-      "listen": "::",
+      "listen": "127.0.0.1",
       "protocol": "trojan",
-      "tag": "trojan-xh",
       "settings": {
         "clients": [
           {
@@ -16,34 +15,27 @@
           }
         ]
       },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
       "streamSettings": {
         "network": "xhttp",
         "xhttpSettings": {
-          "path": "/xhttp-trojan?ed=2560",
-          "mode": "auto",
-          "host": "*"
+          "path": "/xhttp-trojan?ed=2560"
         },
         "sockopt": {
-          "tcpFastOpen": true,
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15,
+          "tcpKeepAlive": true,
           "tcpKeepAliveIdle": 30,
-          "tcpKeepAliveProbes": 3,
-          "tcpQuickAck": true,
-          "tcpCongestion": "bbr"
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveProbes": 5
         }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": ["http", "tls", "fakedns"],
-        "routeOnly": true
       }
     },
     {
       "port": 10002,
-      "listen": "::",
+      "listen": "127.0.0.1",
       "protocol": "vless",
-      "tag": "vless-xh",
       "settings": {
         "clients": [
           {
@@ -53,67 +45,53 @@
         ],
         "decryption": "none"
       },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
       "streamSettings": {
         "network": "xhttp",
         "xhttpSettings": {
-          "path": "/xhttp-vless?ed=2560",
-          "mode": "auto",
-          "host": "*"
+          "path": "/xhttp-vless?ed=2560"
         },
         "sockopt": {
-          "tcpFastOpen": true,
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15,
+          "tcpKeepAlive": true,
           "tcpKeepAliveIdle": 30,
-          "tcpKeepAliveProbes": 3,
-          "tcpQuickAck": true,
-          "tcpCongestion": "bbr"
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveProbes": 5
         }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": ["http", "tls", "fakedns"],
-        "routeOnly": true
       }
     },
     {
       "port": 10003,
-      "listen": "::",
+      "listen": "127.0.0.1",
       "protocol": "shadowsocks",
-      "tag": "shadowsocks-xh",
       "settings": {
         "method": "chacha20-ietf-poly1305",
         "password": "freenet",
         "network": "tcp,udp"
       },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
       "streamSettings": {
         "network": "xhttp",
         "xhttpSettings": {
-          "path": "/xhttp-ss?ed=2560",
-          "mode": "auto",
-          "host": "*"
+          "path": "/xhttp-ss?ed=2560"
         },
         "sockopt": {
-          "tcpFastOpen": true,
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15,
+          "tcpKeepAlive": true,
           "tcpKeepAliveIdle": 30,
-          "tcpKeepAliveProbes": 3,
-          "tcpQuickAck": true,
-          "tcpCongestion": "bbr"
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveProbes": 5
         }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": ["http", "tls", "fakedns"],
-        "routeOnly": true
       }
     },
     {
       "port": 10004,
-      "listen": "::",
+      "listen": "127.0.0.1",
       "protocol": "vmess",
-      "tag": "vmess-xh",
       "settings": {
         "clients": [
           {
@@ -123,27 +101,21 @@
           }
         ]
       },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
       "streamSettings": {
         "network": "xhttp",
         "xhttpSettings": {
-          "path": "/xhttp-vmess?ed=2560",
-          "mode": "auto",
-          "host": "*"
+          "path": "/xhttp-vmess?ed=2560"
         },
         "sockopt": {
-          "tcpFastOpen": true,
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15,
+          "tcpKeepAlive": true,
           "tcpKeepAliveIdle": 30,
-          "tcpKeepAliveProbes": 3,
-          "tcpQuickAck": true,
-          "tcpCongestion": "bbr"
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveProbes": 5
         }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": ["http", "tls", "fakedns"],
-        "routeOnly": true
       }
     }
   ],
