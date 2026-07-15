@@ -1,18 +1,20 @@
-FROM alpine:3.20 AS builder
-WORKDIR /app
-RUN apk add --no-cache curl unzip ca-certificates
-ARG XRAY_VERSION=v24.9.30
-RUN curl -fL --retry 3 --retry-delay 2 https://github.com/XTLS/Xray-core/releases/download/${XRAY_VERSION}/Xray-linux-64.zip -o xray.zip \
- && unzip xray.zip xray && chmod +x xray && mv xray /usr/local/bin/ \
- && rm -f xray.zip
+FROM alpine:3.20
 
-FROM openresty/openresty:1.25.3.1-alpine
-RUN apk add --no-cache ca-certificates bash tzdata curl
-COPY --from=builder /usr/local/bin/xray /usr/local/bin/xray
-COPY config.json /etc/xray.json
-COPY entrypoint.sh /entrypoint.sh
-# Importante: Kuhaa ang CRLF kung naa
-RUN dos2unix /entrypoint.sh || true && chmod +x /usr/local/bin/xray /entrypoint.sh
-ENV PORT=8080
+ENV XRAY_VERSION=1.8.24
+
+RUN apk update --no-cache && apk add --no-cache \
+    nginx wget unzip ca-certificates tzdata
+
+RUN wget -qO /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-64.zip && \
+    unzip /tmp/xray.zip -d /usr/local/bin/ && rm /tmp/xray.zip && \
+    chmod +x /usr/local/bin/xray
+
+RUN rm -rf /etc/nginx/conf.d/* /etc/nginx/http.d/*
+
+COPY xray.json /etc/xray/config.json
+COPY nginx.conf /etc/nginx/nginx.conf
+
 EXPOSE 8080
-ENTRYPOINT ["/entrypoint.sh"]
+
+# ✅ ENTRYPOINT - magpadagan sa duha ka serbisyo nga dili mapalong
+ENTRYPOINT ["/bin/sh", "-c", "nginx -g 'daemon off;' & exec xray run -c /etc/xray/config.json"]
